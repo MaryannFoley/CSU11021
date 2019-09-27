@@ -59,8 +59,16 @@
 	LDR	R1, =2	; x = 2
 	LDR	R2, =8	
 	LDR	R3, =3
-	MUL R3, R1, R3
-	
+	MUL R3, R1, R3 ;3x
+	ADD	R2, R3, R2 ; 3x+8
+	LDR	R3, =4
+	MUL R3, R1, R3 ;4x
+	MUL R3, R1, R3 ;4x^2
+	ADD	R2, R3, R2 ;4x^2+3x+8
+	MOV R3, R1 ;x
+	MUL R3, R1, R3 ;x^2
+	MUL R3, R1, R3 ;x^3
+	ADD	R2, R3, R2 ;x^3+4x^2+3x+8
 
 	; your program goes here
 
