@@ -27,7 +27,7 @@ doGet
 		CMP R1, #0x7A
 		BHI endif
 			SUB R1, R1, #0x20
-	endif
+endif
 
 	BL	put
 	CMP	R0, #0x0D	; Stop when RETURN is entered (ASCII 0x0A)
