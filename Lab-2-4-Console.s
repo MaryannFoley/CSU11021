@@ -22,11 +22,11 @@ doGet
 	; The next instruction will send the character code in R0 to
 	;  the console, where it will be displayed
 
-	CMP R1, #0x61
-	BLO endif
-		CMP R1, #0x7A
+	CMP R0, #0x61				; if R0 > a
+	BLO endif					
+		CMP R0, #0x7A			; if R0 < z
 		BHI endif
-			SUB R1, R1, #0x20
+			SUB R0, R0, #0x20	; R0 = R0 - 0x20
 endif
 
 	BL	put

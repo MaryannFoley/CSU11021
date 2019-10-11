@@ -8,7 +8,7 @@
 
 	BL	inithw		; Get ready for console I/O
 	
-	LDR R2, =0		; Running total
+	LDR R2, =0		; b=0 (Running total)
 	
 doGet
 	BL	get
@@ -23,14 +23,17 @@ doGet
 	;  followed by the RETURN key, your program should store 128 (base 10)
 	;  in R1 (0x00000080).
 	
-	LDR R3, =10
-	MUL R2, R3, R2
-	SUB R1, R1, #0x30
-	ADD R2, R1, R2
-	MOV R1, R2
 	
 	CMP	R0, #0x0D	; Stop when RETURN is entered (ASCII 0x0A)
-	BNE	doGet
+	BEQ	STOP		
+	
+	LDR R3, =10			; a=10
+	MUL R2, R3, R2		; b=b*10
+	SUB R0, R0, #0x30	; c=c-0x30 (convert an ascii character value to a number)
+	ADD R2, R0, R2		; b=b+c	
+	MOV R1, R2			; R1 = b
+	
+	B	doGet
 
 STOP	B	STOP
 
