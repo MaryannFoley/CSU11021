@@ -17,6 +17,83 @@
 	LDR	R4, [R6]	; load sizeB
 	LDR	R5, =elemsB	; address of elemsB
 
+; x = 0
+; while x < sizeA:
+;	element = A[addressA]
+;	store C[x]=element
+;	x +=1
+;	addressA+=4
+;	addressC+=4
+;	j = memory[R0]
+;	j+=1
+;	Store j in R0
+; x =0
+; numBytes = sizeA*4
+; addressA -= numBytes
+; while x < sizeB
+;	 element = B[addressB]
+;	 y=0
+;	 while y < sizeA:
+;		element2 = A[addressA]
+;		if element == element2:
+; 			branch to aaaa
+;		else:
+;			addressA+=4
+; 	 store C[x]=element
+; 	 addressC+=4
+;	 j = memory[R0]
+;	 j+=1
+;	 Store j in R0
+;	 aaaa
+;	 addressB+=4
+; 	 x+=1
+
+	LDR R6, =0
+while1
+	CMP R6, R2
+	BHS endwh1
+	LDR R7, [R3]
+	STR R7, [R1]
+	ADD R6, R6, #1
+	ADD R1, R1, #0x4
+	ADD R3, R3, #0x4
+	LDR R7, [R0]
+	ADD R7, R7, #1
+	STR R7, [R0]
+	B while1
+endwh1
+	LDR R7, =4
+	MUL R7, R2, R7
+	SUB R3, R3, R7
+	
+	LDR R6, =0
+	
+while2
+	CMP R6, R4
+	BHS endwh2
+	LDR R7, [R5]
+	LDR R8, =0
+while3
+		CMP R8, R2
+		BHS endwh3
+		LDR R9, [R5]
+		CMP R7, R9
+		BEQ wh2
+		ADD R3, R3, #0x4
+		ADD R8, #1
+		B while3
+endwh3
+	STR R7, [R1]
+	ADD R1, R1, #0x4
+	LDR R7, [R0]
+	ADD R7, R7, #1
+	STR R7, [R0]
+wh2
+	ADD R1, R1, #0x4
+	ADD R6, R6, #1
+	B while2
+endwh2
+
 	;
 	; Your program to compute the interaction of A and B goes here
 	;
