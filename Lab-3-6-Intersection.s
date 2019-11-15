@@ -17,19 +17,41 @@
 	LDR	R4, [R6]	; load sizeB
 	LDR	R5, =elemsB	; address of elemsB
 
+	LDR R6, =0			; indexB = 0
+	
+while2					; while indexB < sizeB
+	CMP R6, R4	
+	BHS endwh2
+	LDR R7, [R5]		;	 element = B[addressB]
+	LDR R8, =0
+while3					;	 indexA=0
+		CMP R8, R2		;	 while indexA < sizeA:
+		BHS wh2
+		LDR R9, [R3]	;		element2 = A[addressA]
+		CMP R7, R9		;		if element == element2:
+		BEQ endwh3		; 			branch to end of while
+		ADD R3, R3, #4	;		else:	addressA+=4
+		ADD R8, #1		;				indexA+=4
+		B while3
+endwh3
+	STR R7, [R1]		; 	 store C[x]=element
+	ADD R1, R1, #4		; 	 addressC+=4
+	LDR R7, [R0]		;	 j = memory[R0]
+	ADD R7, R7, #1		;	 j+=1
+	STR R7, [R0]		;	 memory[R0] = j
+wh2							
+	LDR R3, =elemsA		;	address of elemsA
+	ADD R5, R5, #4		;	 addressB+=4
+	ADD R6, R6, #1		; 	 x+=1
+	B while2
+endwh2
+	
+	
+	
+
+
+	B STOP
 ; x = 0
-; while x < sizeA:
-;	element = A[addressA]
-;	store C[x]=element
-;	x +=1
-;	addressA+=4
-;	addressC+=4
-;	j = memory[R0]
-;	j+=1
-;	Store j in R0
-; x =0
-; numBytes = sizeA*4
-; addressA -= numBytes
 ; while x < sizeB
 ;	 element = B[addressB]
 ;	 y=0
@@ -48,52 +70,6 @@
 ;	 addressB+=4
 ; 	 x+=1
 
-	LDR R6, =0
-while1
-	CMP R6, R2
-	BHS endwh1
-	LDR R7, [R3]
-	STR R7, [R1]
-	ADD R6, R6, #1
-	ADD R1, R1, #0x4
-	ADD R3, R3, #0x4
-	LDR R7, [R0]
-	ADD R7, R7, #1
-	STR R7, [R0]
-	B while1
-endwh1
-	LDR R7, =4
-	MUL R7, R2, R7
-	SUB R3, R3, R7
-	
-	LDR R6, =0
-	
-while2
-	CMP R6, R4
-	BHS endwh2
-	LDR R7, [R5]
-	LDR R8, =0
-while3
-		CMP R8, R2
-		BHS endwh3
-		LDR R9, [R5]
-		CMP R7, R9
-		BEQ wh2
-		ADD R3, R3, #0x4
-		ADD R8, #1
-		B while3
-endwh3
-	STR R7, [R1]
-	ADD R1, R1, #0x4
-	LDR R7, [R0]
-	ADD R7, R7, #1
-	STR R7, [R0]
-wh2
-	ADD R1, R1, #0x4
-	ADD R6, R6, #1
-	B while2
-endwh2
-
 	;
 	; Your program to compute the interaction of A and B goes here
 	;
@@ -109,6 +85,6 @@ sizeA	DCD	4
 elemsA	DCD	7, 14, 6, 3
 
 sizeB	DCD	9
-elemsB	DCD	20, 11, 14, 5, 7, 2, 9, 12, 17
+elemsB	DCD	7, 6, 11, 14, 5, 2, 9, 12, 17
 
 	END
