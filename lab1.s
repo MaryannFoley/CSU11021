@@ -49,15 +49,15 @@ wh	CMP R1, R2					;	while startIndex!=endIndex:
 
 lessWh	CMP R1, R2				;else:	
 	BEQ endShift				;	while startIndex!=endIndex:
-	ADD R1, R1, #1
-	LDR R5, [R0, R1, LSL #2]
-	SUB R1, R1, #1
-	STR R5, [R0, R1, LSL #2]
-	ADD R1, R1, #1
+	ADD R1, R1, #1				;		startIndex+=1
+	LDR R5, [R0, R1, LSL #2]		;		temporary = memory[startIndex]
+	SUB R1, R1, #1				;		startIndex-=1
+	STR R5, [R0, R1, LSL #2]		;		memory[startIndex]=temporary
+	ADD R1, R1, #1				;		startIndex+=1
 	B lessWh
 	
 endShift
-	STR R4, [R0, R2, LSL #2]
+	STR R4, [R0, R2, LSL #2]		;memory[endIndex]= initialValue
 	
 STOP	B	STOP
 
