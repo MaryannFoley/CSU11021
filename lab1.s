@@ -29,19 +29,36 @@ L2
 	; initialise registers for your program
 
 	LDR	R0, =ARRAY
-	LDR	R1, =6
-	LDR	R2, =3
+	LDR	R1, =3
+	LDR	R2, =6
 	LDR	R3, =N
 
-	; your program goes here
+	LDR R4, [R0, R1, LSL #2]	;Load initial value
+	
+	CMP R1, R2					;if startIndex >= endIndex:
+	BLT lessWh
 
-	LDR R4, [R0, R1, LSL #2]
-wh	CMP R1, R2
-	BEQ endShift
+wh	CMP R1, R2					;	while startIndex!=endIndex:
+	BEQ endShift				
+	SUB R1, R1, #1				;		startIndex-=1
+	LDR R5, [R0, R1, LSL #2]	;		temporary = memory[startIndex]
+	ADD R1, R1, #1				;		startIndex+=1
+	STR R5, [R0, R1, LSL #2]	;		memory[startIndex] = temporary
+	SUB R1, R1, #1				;		startIndex-=1
+	B wh
+
+lessWh	CMP R1, R2				;else:	
+	BEQ endShift				;	while startIndex!=endIndex:
 	ADD R1, R1, #1
 	LDR R5, [R0, R1, LSL #2]
-	STR 
-
+	SUB R1, R1, #1
+	STR R5, [R0, R1, LSL #2]
+	ADD R1, R1, #1
+	B lessWh
+	
+endShift
+	STR R4, [R0, R2, LSL #2]
+	
 STOP	B	STOP
 
 	END
