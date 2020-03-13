@@ -35,6 +35,14 @@ arrB	SPACE	1024
 	; Your program to test your subroutine goes here
 	;
 
+    LDR R0, =arrA
+    LDR R1, =arrB
+    LDR R4, =sizeA
+    LDR R2, [R4]
+    LDR R4, =sizeB
+    LDR R3, [R4]
+    difference
+
 STOP	B	STOP
 
 ;
